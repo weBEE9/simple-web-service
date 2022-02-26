@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  backend:
+    image: simple-web-service
+    ports:
+      - 8080:8080
+    environment:
+      - APP_DB_DRIVER=postgres
+      - APP_DB_HOST=database
+      - APP_DB_PORT=5432
+      - APP_DB_USER=service
+      - APP_DB_PASSWORD=service
+      - APP_DB_DATABASE=service
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "enviroment=staging,name=backend"
+
+  database:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=service
+      - POSTGRES_PASSWORD=service
+      - POSTGRES_DB=service
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-external-labels: "enviroment=staging,name=database"
+
+volumes:
+  pg-data:
