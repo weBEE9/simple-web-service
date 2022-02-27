@@ -21,6 +21,7 @@ func NewEngine(cfg config.Config) (*xorm.Engine, error) {
 	if err := e.Sync2(tables...); err != nil {
 		return nil, err
 	}
+	e.ShowSQL(cfg.DB.Debug)
 
 	return e, nil
 }

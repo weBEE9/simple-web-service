@@ -12,6 +12,7 @@ type db struct {
 	User     string `envconfig:"APP_DB_USER" default:"db"`
 	Password string `envconfig:"APP_DB_PASSWORD" default:"db"`
 	Database string `envconfig:"APP_DB_DATABASE" default:"banking"`
+	Debug    bool   `envconfig:"APP_DB_DEBUG" default:"true"`
 }
 
 // Config app config
