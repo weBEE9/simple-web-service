@@ -2,8 +2,11 @@ version: '3.7'
 services:
   backend:
     image: simple-web-service
-    ports:
-      - 8080:8080
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - web
     environment:
       - APP_DB_DRIVER=postgres
       - APP_DB_HOST=database
@@ -16,9 +19,16 @@ services:
       options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
         loki-external-labels: "enviroment=staging,name=backend"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
 
   database:
     image: postgres:14-alpine
+    restart: always
+    networks:
+      - web
     environment:
       - POSTGRES_USER=service
       - POSTGRES_PASSWORD=service
@@ -32,6 +42,12 @@ services:
       options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
         loki-external-labels: "enviroment=staging,name=database"
+    labels:
+      - "traefik.enable=false"
 
 volumes:
   pg-data:
+
+networks:
+  web:
+    external: true
