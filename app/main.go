@@ -10,6 +10,9 @@ import (
 	ginzerolog "github.com/dn365/gin-zerolog"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 )
 
 func main() {
@@ -30,6 +33,13 @@ func initRouter(cfg config.Config) *gin.Engine {
 	repo := initRepo(cfg)
 	service := service.NewDefaultUserService(repo)
 
+	tp, err := tracerProvider("http://localhost:14268/api/traces")
+	if err != nil {
+		panic(err)
+	}
+
+	router.Use(otelgin.Middleware("simple-web-service", otelgin.WithTracerProvider(tp)))
+
 	handler.InitHandler(router, service)
 
 	return router
@@ -46,4 +56,18 @@ func initRepo(cfg config.Config) repository.UserRepository {
 	default:
 		return repository.NewUserRepositoryStub()
 	}
+}
+
+func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
+	// Create the Jaeger exporter
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
+	if err != nil {
+		return nil, err
+	}
+	tp := tracesdk.NewTracerProvider(
+		// Always be sure to batch in production.
+		tracesdk.WithBatcher(exp),
+		// Record information about this application in a Resource.
+	)
+	return tp, nil
 }

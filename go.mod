@@ -13,6 +13,11 @@ require (
 	github.com/rs/zerolog v1.26.1
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.14.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.29.0
+	go.opentelemetry.io/otel v1.4.1
+	go.opentelemetry.io/otel/exporters/jaeger v1.4.1
+	go.opentelemetry.io/otel/sdk v1.4.1
+	go.opentelemetry.io/otel/trace v1.4.1
 	xorm.io/core v0.7.3
 	xorm.io/xorm v1.2.5
 )
@@ -20,6 +25,8 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-logr/logr v1.2.2 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
@@ -37,7 +44,7 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect
-	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
+	golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 	xorm.io/builder v0.3.9 // indirect

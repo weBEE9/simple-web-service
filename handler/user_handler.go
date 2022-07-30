@@ -6,6 +6,7 @@ import (
 	"weBEE9/simple-web-service/service"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // UserHandler ...
@@ -23,6 +24,10 @@ func InitHandler(e *gin.Engine, s service.UserService) {
 }
 
 func (handler UserHandler) getAllUsers(c *gin.Context) {
+	span := trace.SpanFromContext(c)
+	defer span.End()
+	span.SetName("getAllUsers")
+
 	users, err := handler.Service.GetAllUsers()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
@@ -39,6 +44,10 @@ func (handler UserHandler) getAllUsers(c *gin.Context) {
 }
 
 func (handler UserHandler) getUserByID(c *gin.Context) {
+	span := trace.SpanFromContext(c)
+	defer span.End()
+	span.SetName("getUserByID")
+
 	id := c.Param("id")
 	userID, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
