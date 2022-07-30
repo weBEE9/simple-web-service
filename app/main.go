@@ -4,6 +4,7 @@ import (
 	"weBEE9/simple-web-service/config"
 	"weBEE9/simple-web-service/database"
 	"weBEE9/simple-web-service/handler"
+	"weBEE9/simple-web-service/middleware/prometheus"
 	"weBEE9/simple-web-service/repository"
 	"weBEE9/simple-web-service/service"
 
@@ -39,6 +40,7 @@ func initRouter(cfg config.Config) *gin.Engine {
 	}
 
 	router.Use(otelgin.Middleware("simple-web-service", otelgin.WithTracerProvider(tp)))
+	router.GET("/metrics", prometheus.Handler())
 
 	handler.InitHandler(router, service)
 

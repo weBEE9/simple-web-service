@@ -1,4 +1,4 @@
-FROM golang:1.17-alpine3.14
+FROM golang:1.18-alpine3.14
 
 LABEL maintainer="Weeee9 <teletubby332@gmail.com>"
 
